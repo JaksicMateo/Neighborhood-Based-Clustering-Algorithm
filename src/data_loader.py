@@ -16,9 +16,9 @@ class DataLoader:
 
             # applying limit if it exists
             if limit is not None and limit < len(self.data):
-                print(f'Limiting dataset to first {limit} rows')
+                print(f'    Limiting dataset to the okfirst {limit} rows')
                 self.data = self.data.head(limit)
-            print(f'Loaded {len(self.data)} rows with {len(self.data.columns)} features.')
+            print(f'    Loaded {len(self.data)} rows with {len(self.data.columns)} features.')
             
             # identifying numerical and nominal features
             self.numerical_cols = self.data.select_dtypes(include=[np.number]).columns.tolist()
