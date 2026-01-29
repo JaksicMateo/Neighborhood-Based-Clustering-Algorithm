@@ -52,5 +52,5 @@ class Clustering:
                     queue.append(neighbor)
 
     # function for getting predicted labels
-    def get_labels(self):
+    def get_predicted_labels(self):
         return self.labels
