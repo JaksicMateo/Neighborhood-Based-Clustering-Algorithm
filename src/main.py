@@ -34,6 +34,7 @@ def main():
         target_column = 'quality'
     else:
         print(f'Error: Unknown dataset \'{args.dataset}\'. No target column defined.')
+    
     print(f'Target column: {target_column}')
     print(f'k: {args.k}\n')
 
@@ -81,7 +82,7 @@ def main():
     execution_time = end_time - start_time
     print(f'Algorithm Execution Time: {execution_time:.5f} seconds\n')
 
-    # performe evaluation
+    # performance evaluation
     print(f'Evaluating Clustering...')
     evaluator = Evaluator()
     metrics = evaluator.compute_metrics(distance_matrix, true_labels, predicted_labels)
@@ -92,7 +93,7 @@ def main():
         print(f'    Silhouette Coefficient couldn\'t be computed - need at least 2 clusters to compute.')
     if metrics.get('ari') is not None:
         print(f'    Adjusted Rand Index: {metrics['ari']:.5f}')
-        print(f'    (1 is perfect match with groumd truth, 0 is random)')
+        print(f'    (1 is perfect match with ground truth, 0 is random)')
     else:
         print(f'    Adjusted Rand Index couldn\'t be computed - need ground truth labels')
     print(f'    Generating Plots...')
