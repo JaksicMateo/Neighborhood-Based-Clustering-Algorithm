@@ -10,20 +10,27 @@ class DataLoader:
         self.nominal_cols = []
 
     # function for loading input data
-    def load_data(self, limit=None):
+    def load_data(self, target_column, limit=None):
         try:
             self.data = pd.read_csv(self.file_path)
+
+            # exclude target column
+            if target_column and target_column in self.data.columns:
+                print(f'    Excluding target column: {target_column}')
+                self.labels = self.data[target_column].copy()
+                self.data = self.data.drop(columns=[target_column])
 
             # applying limit if it exists
             if limit is not None and limit < len(self.data):
                 print(f'    Limiting dataset to the first {limit} rows')
                 self.data = self.data.head(limit)
+                self.labels = self.labels.head(limit)
             print(f'    Loaded {len(self.data)} rows with {len(self.data.columns)} features.')
             
             # identifying numerical and nominal features
             self.numerical_cols = self.data.select_dtypes(include=[np.number]).columns.tolist()
             self.nominal_cols = self.data.select_dtypes(exclude=[np.number]).columns.tolist()
-            return self.data
+            return None
         
         except FileNotFoundError:
             print(f'Error: File {self.file_path} not found.')
@@ -59,3 +66,7 @@ class DataLoader:
             processed_data[self.numerical_cols] = scaler.fit_transform(processed_data[self.numerical_cols])
         
         return processed_data, self.numerical_cols, self.nominal_cols
+    
+    # function for getting ground truth labels
+    def get_true_labels(self):
+        return self.labels
