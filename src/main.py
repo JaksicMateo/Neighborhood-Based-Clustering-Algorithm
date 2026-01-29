@@ -4,6 +4,7 @@ import numpy as np
 from data_loader import DataLoader
 from distance import DistanceCalculator
 from neighborhood import NeighborhoodBuilder
+from clustering import Clustering
 
 # function for parsing input arguments
 def parse_arguments():
@@ -47,6 +48,14 @@ def main():
     print(f'    Even Points: {ep_count}')
     print(f'    Sparse Points: {sp_count}')
     print(f'Neighborhood built.\n')
+
+    # execute clustering
+    print(f'Clustering...')
+    clustering = Clustering(knb_mask, types)
+    labels, n_clusters, n_noise = clustering.run_clustering()
+    print(f'    Clusters Found: {n_clusters}')
+    print(f'    Noise Points: {n_noise}')
+    print(f'Clustering Complete.\n')
 
 if __name__ == '__main__':
     main()
