@@ -22,7 +22,7 @@ class Clustering:
         n_clusters = self.cluster_id
         n_noise = np.sum(self.labels == -1)
 
-        return self.labels, n_clusters, n_noise
+        return n_clusters, n_noise
     
     # function for expanding cluster
     def expand_cluster(self, seed_index):
@@ -47,6 +47,10 @@ class Clustering:
 
                 # if neighbor if a core point (DP, EP) we add it to queue to continue expanding from there
                 # if it's sparse point then we don't add it to the queue and stop expansion path
-                
+
                 if self.point_types[neighbor] in ['DP', 'EP']:
                     queue.append(neighbor)
+
+    # function for getting predicted labels
+    def get_labels(self):
+        return self.labels
