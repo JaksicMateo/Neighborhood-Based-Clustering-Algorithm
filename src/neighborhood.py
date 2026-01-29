@@ -28,4 +28,4 @@ class NeighborhoodBuilder:
         point_types[ndf_values >= 1.000001] = 'DP'
         point_types[np.isclose(ndf_values, 1.0)] = 'EP'
 
-        return ndf_values, point_types, knb_mask
+        return point_types, knb_mask
