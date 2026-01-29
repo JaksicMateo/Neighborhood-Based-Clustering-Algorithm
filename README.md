@@ -74,19 +74,19 @@ Parameters such as the number of neighbors `k` can be adjusted to analyze their 
 Example workflows for different datasets:
 
 ```bash
-python src/main.py --dataset data/bank_marketing.csv --k 10
+python src/main.py --dataset data/bank_marketing.csv --k 20 --limit
 ```
 
 ```bash
-python src/main.py --dataset data/flags.csv --k 10
+python src/main.py --dataset data/flags.csv --k 8
 ```
 
 ```bash
-python src/main.py --dataset data/wine_quality.csv --k 10
+python src/main.py --dataset data/wine_quality.csv --k 50 --limit 2000
 ```
 
 Parameters such as the number of rows `limit` can be adjusted to test using smaller dataset, because of computational resources.
 
 ```bash
-python src/main.py --dataset data/bank_marketing.csv --k 10 --limit 2500
+python src/main.py --dataset data/bank_marketing.csv --k 10 --limit 2000
 ```
