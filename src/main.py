@@ -5,6 +5,7 @@ from data_loader import DataLoader
 from distance import DistanceCalculator
 from neighborhood import NeighborhoodBuilder
 from clustering import Clustering
+from evaluation import Evaluator
 
 # function for parsing input arguments
 def parse_arguments():
@@ -22,13 +23,25 @@ def main():
     # general informations
     print(f'\nNeighborhood-Based Clustering Algorithm\n')
     print(f'Dataset: {args.dataset}')
+
+    target_column = None
+    if args.dataset == 'data/flags.csv':
+        target_column = 'religion'
+    elif args.dataset == 'data/bank_marketing.csv':
+        target_column = 'subscribe'
+    elif args.dataset == 'data/wine_quality.csv':
+        target_column = 'quality'
+    else:
+        print(f'Error: Unknown dataset \'{args.dataset}\'. No target column defined.')
+    print(f'Target column: {target_column}')
     print(f'k: {args.k}\n')
 
     # loading input data and preprocessing data
     print(f'Step 1: Loading and Preprocessing Data...')
     loader = DataLoader(args.dataset)
-    _ = loader.load_data(limit=args.limit)
+    loader.load_data(target_column, limit=args.limit)
     data, num_cols, nom_cols = loader.preprocess_data()
+    true_labels = loader.get_true_labels()
     print(f'Loading and Preprocessing Complete.\n')
 
     # calculating distance matrix
@@ -52,10 +65,30 @@ def main():
     # execute clustering
     print(f'Clustering...')
     clustering = Clustering(knb_mask, types)
-    labels, n_clusters, n_noise = clustering.run_clustering()
+    n_clusters, n_noise = clustering.run_clustering()
+    predicted_labels = clustering.get_predicted_labels()
     print(f'    Clusters Found: {n_clusters}')
     print(f'    Noise Points: {n_noise}')
     print(f'Clustering Complete.\n')
+
+    # performe evaluation
+    print(f'Evaluating Clustering...')
+    evaluator = Evaluator()
+    metrics = evaluator.compute_metrics(distance_matrix, true_labels, predicted_labels)
+    if metrics.get('silhouette') is not None:
+        print(f'    Silhouette Coefficient: {metrics['silhouette']:.5f}')
+        print(f'    (> 0.5 is good, close to 0 is overlapping, < 0 is incorrect)')
+    else:
+        print(f'    Silhouette Coefficient couldn\'t be computed - need at least 2 clusters to compute.')
+    if metrics.get('ari') is not None:
+        print(f'    Adjusted Rand Index: {metrics['ari']:.5f}')
+        print(f'    (1 is perfect match with groumd truth, 0 is random)')
+    else:
+        print(f'    Adjusted Rand Index couldn\'t be computed - need ground truth labels')
+    print(f'    Generating Plots...')
+    evaluator.plot_clusters(data, predicted_labels, num_cols)
+    evaluator.plot_similarity_heatmap(distance_matrix, predicted_labels)
+    print(f'Evaluation Clustering Complete.\n')
 
 if __name__ == '__main__':
     main()
