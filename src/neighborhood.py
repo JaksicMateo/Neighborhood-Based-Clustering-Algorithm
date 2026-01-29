@@ -9,10 +9,10 @@ class NeighborhoodBuilder:
     # function for building neighborhoods
     def build_neighborhood(self):
         sorted_indices = np.argsort(self.distance_matrix, axis = 1)
-        # instead of getting k closest objects, we get distance of the kth closest object
+        # instead of getting k closest samples, we get distance of the kth closest sample
         kth_distance = np.take_along_axis(self.distance_matrix, sorted_indices[:, self.k][:, None], axis=1)
         
-        # in case there are more then one kth closest object, we take them all
+        # in case there are more then one kth closest sample, we take them all
         knb_mask = self.distance_matrix <= kth_distance
         np.fill_diagonal(knb_mask, False)
 
