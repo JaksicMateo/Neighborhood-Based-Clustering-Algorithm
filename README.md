@@ -69,6 +69,8 @@ pip install -r requirements.txt
 
 ### Running
 
+Parameters such as the number of neighbors `k` can be adjusted to analyze their impact on clustering performance.
+
 Example workflows for different datasets:
 
 ```bash
@@ -83,4 +85,8 @@ python src/main.py --dataset data/flags.csv --k 10
 python src/main.py --dataset data/wine_quality.csv --k 10
 ```
 
-Parameters such as the number of neighbors `k` can be adjusted to analyze their impact on clustering performance.
+Parameters such as the number of rows `limit` can be adjusted to test using smaller dataset, because of computational resources.
+
+```bash
+python src/main.py --dataset data/bank_marketing.csv --k 10 --limit 2500
+```
