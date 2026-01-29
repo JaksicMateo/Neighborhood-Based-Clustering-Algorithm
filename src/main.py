@@ -1,5 +1,6 @@
 import argparse
 import numpy as np
+import time
 
 from data_loader import DataLoader
 from distance import DistanceCalculator
@@ -44,6 +45,10 @@ def main():
     true_labels = loader.get_true_labels()
     print(f'Loading and Preprocessing Complete.\n')
 
+    # starting performance time measuring
+    print(f'Starting Performance Timer...\n')
+    start_time = time.time()
+
     # calculating distance matrix
     print(f'Step 2: Computing Distance Matrix...')
     distance_calculator = DistanceCalculator(num_cols, nom_cols)
@@ -54,8 +59,8 @@ def main():
 
     # building neighborhoods
     print(f'Step 3: Building Neighborhoods...')
-    nb_builder = NeighborhoodBuilder(distance_matrix, args.k)
-    ndf_values, types, knb_mask = nb_builder.build_neighborhood()
+    neighborhood_builder = NeighborhoodBuilder(distance_matrix, args.k)
+    types, knb_mask = neighborhood_builder.build_neighborhood()
     dp_count, ep_count, sp_count = (types == 'DP').sum(), (types == 'EP').sum(), (types == 'SP').sum()
     print(f'    Dense Points: {dp_count}')
     print(f'    Even Points: {ep_count}')
@@ -70,6 +75,11 @@ def main():
     print(f'    Clusters Found: {n_clusters}')
     print(f'    Noise Points: {n_noise}')
     print(f'Clustering Complete.\n')
+
+    # ending performance time measuring
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f'Algorithm Execution Time: {execution_time:.5f} seconds\n')
 
     # performe evaluation
     print(f'Evaluating Clustering...')
